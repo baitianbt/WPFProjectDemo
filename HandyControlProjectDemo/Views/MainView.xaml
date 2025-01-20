@@ -1,0 +1,88 @@
+<Window x:Class="HandyControlProjectDemo.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:views="clr-namespace:HandyControlProjectDemo.Views"
+        xmlns:viewModels="clr-namespace:HandyControlProjectDemo.ViewModels"
+        Title="主界面" 
+        Height="768" 
+        Width="1024"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:UserManageViewModel}">
+            <views:UserManageView/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 顶部菜单栏 -->
+        <hc:SimplePanel Grid.Row="0" Background="{DynamicResource PrimaryBrush}">
+            <Menu Background="Transparent" Foreground="White">
+                <MenuItem Header="系统">
+                    <MenuItem Header="个人信息"/>
+                    <MenuItem Header="修改密码"/>
+                    <Separator/>
+                    <MenuItem Header="退出系统" Command="{Binding Exit}"/>
+                </MenuItem>
+                <MenuItem Header="用户管理">
+                    <MenuItem Header="用户列表" Command="{Binding NavigateToUserManage}"/>
+                </MenuItem>
+                <MenuItem Header="帮助">
+                    <MenuItem Header="关于"/>
+                </MenuItem>
+            </Menu>
+            <TextBlock Text="{Binding CurrentUser}" 
+                     HorizontalAlignment="Right" 
+                     VerticalAlignment="Center"
+                     Margin="0,0,20,0"
+                     Foreground="White"/>
+        </hc:SimplePanel>
+
+        <!-- 主内容区 -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 左侧导航菜单 -->
+            <TreeView Grid.Column="0" 
+                      Margin="10"
+                      BorderThickness="0">
+                <TreeViewItem Header="系统管理">
+                    <TreeViewItem Header="用户管理" 
+                                Selected="TreeViewItem_Selected"/>
+                </TreeViewItem>
+                <TreeViewItem Header="业务管理">
+                    <TreeViewItem Header="功能1"/>
+                    <TreeViewItem Header="功能2"/>
+                </TreeViewItem>
+            </TreeView>
+
+            <!-- 右侧内容区 -->
+            <Border Grid.Column="1" 
+                    Margin="0,10,10,10"
+                    Background="{DynamicResource SecondaryRegionBrush}"
+                    CornerRadius="4">
+                <ContentControl Content="{Binding CurrentView}"/>
+            </Border>
+        </Grid>
+
+        <!-- 底部状态栏 -->
+        <StatusBar Grid.Row="2" Background="{DynamicResource BorderBrush}">
+            <StatusBarItem>
+                <TextBlock Text="就绪"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock Text="{Binding CurrentTime}"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window> 
