@@ -41,7 +41,7 @@ namespace HandyControlProjectDemo.ViewModels
             if (success)
             {
                 Growl.Success(message);
-                var mainVm = new MainViewModel(_userService);
+                var mainVm = new MainViewModel(_windowManager,_userService);
                 _windowManager.ShowWindow(mainVm);
                 RequestClose();
             }

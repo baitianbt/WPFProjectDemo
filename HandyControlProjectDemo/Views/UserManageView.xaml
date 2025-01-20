@@ -17,15 +17,15 @@
                     Orientation="Horizontal" 
                     Margin="0,0,0,10">
             <Button Content="添加用户" 
-                    Command="{Binding AddUser}"
+                    Command="{Binding AddUserCommand}"
                     Style="{StaticResource ButtonPrimary}"
                     Margin="0,0,10,0"/>
             <Button Content="编辑用户" 
-                    Command="{Binding EditUser}"
+                    Command="{Binding EditUserCommand}"
                     Style="{StaticResource ButtonInfo}"
                     Margin="0,0,10,0"/>
             <Button Content="删除用户" 
-                    Command="{Binding DeleteUser}"
+                    Command="{Binding DeleteUserCommand}"
                     Style="{StaticResource ButtonDanger}"/>
         </StackPanel>
 

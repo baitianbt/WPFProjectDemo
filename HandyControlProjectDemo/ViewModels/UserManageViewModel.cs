@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
 using HandyControl.Controls;
 using Stylet;
 
@@ -6,6 +8,7 @@ namespace HandyControlProjectDemo.ViewModels
 {
     public class UserManageViewModel : ViewModelBase
     {
+        private readonly IWindowManager _windowManager;
         private ObservableCollection<UserInfo> _users;
         private UserInfo _selectedUser;
 
@@ -21,8 +24,16 @@ namespace HandyControlProjectDemo.ViewModels
             set => SetAndNotify(ref _selectedUser, value);
         }
 
-        public UserManageViewModel()
+        public ICommand AddUserCommand { get; }
+        public ICommand EditUserCommand { get; }
+        public ICommand DeleteUserCommand { get; }
+
+        public UserManageViewModel(IWindowManager windowManager)
         {
+            _windowManager = windowManager;
+            AddUserCommand = new ActionCommand(AddUser);
+            EditUserCommand = new ActionCommand(EditUser);
+            DeleteUserCommand = new ActionCommand(DeleteUser);
             LoadUsers();
         }
 
@@ -37,29 +48,89 @@ namespace HandyControlProjectDemo.ViewModels
             };
         }
 
-        public void AddUser()
+        private void AddUser()
         {
-            Growl.Info("添加用户功能待实现");
+            var vm = new UserEditViewModel(_windowManager);
+            var result = _windowManager.ShowDialog(vm);
+
+            if (result == true)
+            {
+                var newUser = vm.GetUserInfo();
+                newUser.Id = Users.Max(u => u.Id) + 1;
+                Users.Add(newUser);
+                Growl.Success("添加用户成功！");
+            }
         }
 
-        public void EditUser()
+        private void EditUser()
         {
             if (SelectedUser == null)
             {
                 Growl.Warning("请先选择要编辑的用户");
                 return;
             }
-            Growl.Info("编辑用户功能待实现");
+
+            var vm = new UserEditViewModel(_windowManager, SelectedUser);
+            var result = _windowManager.ShowDialog(vm);
+
+            if (result == true)
+            {
+                var editedUser = vm.GetUserInfo();
+                var index = Users.IndexOf(SelectedUser);
+                Users[index] = editedUser;
+                Growl.Success("编辑用户成功！");
+            }
         }
 
-        public void DeleteUser()
+        private void DeleteUser()
         {
             if (SelectedUser == null)
             {
                 Growl.Warning("请先选择要删除的用户");
                 return;
             }
-            Growl.Info("删除用户功能待实现");
+
+            if (SelectedUser.Username == "admin")
+            {
+                Growl.Error("不能删除管理员账号！");
+                return;
+            }
+
+            Growl.Ask("确定要删除该用户吗？", isConfirmed =>
+            {
+                if (isConfirmed)
+                {
+                    Users.Remove(SelectedUser);
+                    Growl.Success("删除用户成功！");
+                }
+                return true;
+            });
+        }
+    }
+
+    public class ActionCommand : ICommand
+    {
+        private readonly System.Action _execute;
+
+        public ActionCommand(System.Action execute)
+        {
+            _execute = execute;
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event System.EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute();
         }
     }
 

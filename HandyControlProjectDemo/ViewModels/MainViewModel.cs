@@ -8,6 +8,7 @@ namespace HandyControlProjectDemo.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly IUserService _userService;
+        private readonly IWindowManager _windowManager;
         private string _currentUser;
         private string _currentTime;
         private ViewModelBase _currentView;
@@ -30,8 +31,9 @@ namespace HandyControlProjectDemo.ViewModels
             set => SetAndNotify(ref _currentView, value);
         }
 
-        public MainViewModel(IUserService userService)
+        public MainViewModel(IWindowManager windowManager, IUserService userService)
         {
+            _windowManager = windowManager;
             _userService = userService;
             CurrentUser = UserService.GetCurrentUsername();
 
@@ -62,7 +64,7 @@ namespace HandyControlProjectDemo.ViewModels
         public void NavigateToUserManage()
         {
             if (CurrentView is UserManageViewModel) return;
-            CurrentView = new UserManageViewModel();
+            CurrentView = new UserManageViewModel(_windowManager);
         }
 
         public void Exit()

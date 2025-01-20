@@ -1,9 +1,10 @@
 using System.Windows;
 using System.Windows.Input;
+using HandyControl.Controls;
 
 namespace HandyControlProjectDemo.Views
 {
-    public partial class UserEditView : Window
+    public partial class UserEditView : HandyControl.Controls.Window
     {
         public UserEditView()
         {

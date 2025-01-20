@@ -2,18 +2,34 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:s="https://github.com/canton7/Stylet"
-             xmlns:hc="https://handyorg.github.io/handycontrol"
-             xmlns:local="clr-namespace:HandyControlProjectDemo">
+             xmlns:local="clr-namespace:HandyControlProjectDemo"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:hc="https://handyorg.github.io/handycontrol">
     <Application.Resources>
-        <s:ApplicationLoader>
-            <s:ApplicationLoader.Bootstrapper>
-                <local:Bootstrapper/>
-            </s:ApplicationLoader.Bootstrapper>
-
-            <s:ApplicationLoader.MergedDictionaries>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources/>
                 <hc:Theme/>
-            </s:ApplicationLoader.MergedDictionaries>
-        </s:ApplicationLoader>
+                <ResourceDictionary>
+                    <s:ApplicationLoader x:Key="bootstrapper">
+                        <s:ApplicationLoader.Bootstrapper>
+                            <local:Bootstrapper/>
+                        </s:ApplicationLoader.Bootstrapper>
+                    </s:ApplicationLoader>
+
+                    <!-- 角色列表 -->
+                    <x:Array x:Key="Roles" Type="sys:String">
+                        <sys:String>管理员</sys:String>
+                        <sys:String>普通用户</sys:String>
+                    </x:Array>
+
+                    <!-- 状态列表 -->
+                    <x:Array x:Key="Statuses" Type="sys:String">
+                        <sys:String>启用</sys:String>
+                        <sys:String>禁用</sys:String>
+                    </x:Array>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
