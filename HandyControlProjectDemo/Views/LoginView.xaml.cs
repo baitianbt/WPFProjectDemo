@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using HandyControlProjectDemo.ViewModels;
 
 namespace HandyControlProjectDemo.Views
@@ -9,6 +10,19 @@ namespace HandyControlProjectDemo.Views
         public LoginView()
         {
             InitializeComponent();
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
